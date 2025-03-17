@@ -16,7 +16,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kmmania/er_backend/er_common_lib/pkg/logger"
+	"github.com/kmmania/er_backend/er_commonlib/pkg/logger"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"

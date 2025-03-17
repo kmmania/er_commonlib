@@ -11,7 +11,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/kmmania/er_backend/er_common_lib/pkg/logger"
+	"github.com/kmmania/er_backend/er_commonlib/pkg/logger"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"

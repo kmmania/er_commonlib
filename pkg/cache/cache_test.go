@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kmmania/er_backend/er_common_lib/pkg/cache"
-	mocks "github.com/kmmania/er_backend/er_common_lib/pkg/mocks/cache"
+	"github.com/kmmania/er_backend/er_commonlib/pkg/cache"
+	mocks "github.com/kmmania/er_backend/er_commonlib/pkg/mocks/cache"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
