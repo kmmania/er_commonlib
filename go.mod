@@ -1,4 +1,4 @@
-module github.com/kmmania/er_backend/er_commonlib
+module github.com/kmmania/er_commonlib
 
 go 1.23.0
 
