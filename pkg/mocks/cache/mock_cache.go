@@ -10,6 +10,7 @@ import (
 	time "time"
 
 	gomock "github.com/golang/mock/gomock"
+	logger "github.com/kmmania/er_commonlib/pkg/logger"
 )
 
 // MockRedisCache is a mock of RedisCache interface.
@@ -63,6 +64,35 @@ func (mr *MockRedisCacheMockRecorder) Get(ctx, key, dest, timeout interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRedisCache)(nil).Get), ctx, key, dest, timeout)
 }
 
+// GetFromCache mocks base method.
+func (m *MockRedisCache) GetFromCache(ctx context.Context, key string, logger logger.Logger, target interface{}) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFromCache", ctx, key, logger, target)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFromCache indicates an expected call of GetFromCache.
+func (mr *MockRedisCacheMockRecorder) GetFromCache(ctx, key, logger, target interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFromCache", reflect.TypeOf((*MockRedisCache)(nil).GetFromCache), ctx, key, logger, target)
+}
+
+// InvalidateCache mocks base method.
+func (m *MockRedisCache) InvalidateCache(ctx context.Context, key string, logger logger.Logger) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InvalidateCache", ctx, key, logger)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// InvalidateCache indicates an expected call of InvalidateCache.
+func (mr *MockRedisCacheMockRecorder) InvalidateCache(ctx, key, logger interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InvalidateCache", reflect.TypeOf((*MockRedisCache)(nil).InvalidateCache), ctx, key, logger)
+}
+
 // Set mocks base method.
 func (m *MockRedisCache) Set(ctx context.Context, key string, value interface{}, ttl, timeout time.Duration) {
 	m.ctrl.T.Helper()
@@ -73,4 +103,16 @@ func (m *MockRedisCache) Set(ctx context.Context, key string, value interface{},
 func (mr *MockRedisCacheMockRecorder) Set(ctx, key, value, ttl, timeout interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockRedisCache)(nil).Set), ctx, key, value, ttl, timeout)
+}
+
+// SetCache mocks base method.
+func (m *MockRedisCache) SetCache(ctx context.Context, key string, data interface{}, logger logger.Logger) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetCache", ctx, key, data, logger)
+}
+
+// SetCache indicates an expected call of SetCache.
+func (mr *MockRedisCacheMockRecorder) SetCache(ctx, key, data, logger interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCache", reflect.TypeOf((*MockRedisCache)(nil).SetCache), ctx, key, data, logger)
 }
