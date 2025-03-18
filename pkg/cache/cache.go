@@ -42,6 +42,15 @@ type RedisCache interface {
 
 	// Delete removes a value from the cache by its key, applying a timeout.
 	Delete(ctx context.Context, key string, timeout time.Duration) error
+
+	// GetFromCache retrieves data from the cache if it exists.
+	GetFromCache(ctx context.Context, key string, logger logger.Logger, target interface{}) (bool, error)
+
+	// SetCache stores data in the cache with the specified key.
+	SetCache(ctx context.Context, key string, data interface{}, logger logger.Logger)
+
+	// InvalidateCache removes cached data for a specific key.
+	InvalidateCache(ctx context.Context, key string, logger logger.Logger) error
 }
 
 // RedisCacheManager is a struct that manages interactions with a Redis cache instance.
@@ -173,7 +182,7 @@ func (cm *RedisCacheManager) Delete(ctx context.Context, key string, timeout tim
 //
 // Parameters:
 //   - ctx (context.Context): The context for the cache operation.
-//   - cacheKey (string): The key used to retrieve the data from the cache.
+//   - key (string): The key used to retrieve the data from the cache.
 //   - logger (logger.Logger): The logger instance for logging cache operations.
 //   - target (interface{}): A pointer to the object where the cached data will be stored.
 //
@@ -182,16 +191,16 @@ func (cm *RedisCacheManager) Delete(ctx context.Context, key string, timeout tim
 //   - error: An error if the cache operation fails, or nil if successful.
 func (cm *RedisCacheManager) GetFromCache(
 	ctx context.Context,
-	cacheKey string,
+	key string,
 	logger logger.Logger,
 	target interface{},
 ) (bool, error) {
-	err := cm.Get(ctx, cacheKey, target, CachedTimeout)
+	err := cm.Get(ctx, key, target, CachedTimeout)
 	if err == nil {
-		logger.Info("Response from cache", zap.String("cacheKey", cacheKey))
+		logger.Info("Response from cache", zap.String("cacheKey", key))
 		return true, nil
 	} else if errors.Is(err, ErrCacheMiss) {
-		logger.Info("Cache miss", zap.String("cacheKey", cacheKey))
+		logger.Info("Cache miss", zap.String("cacheKey", key))
 		return false, nil
 	} else {
 		logger.Error("Cache access error", zap.Error(err))
@@ -204,17 +213,12 @@ func (cm *RedisCacheManager) GetFromCache(
 //
 // Parameters:
 //   - ctx (context.Context): The context for the cache operation.
-//   - cacheKey (string): The key under which the data will be stored in the cache.
+//   - key (string): The key under which the data will be stored in the cache.
 //   - data (interface{}): The data to be stored in the cache.
 //   - logger (logger.Logger): The logger instance for logging cache operations.
-func (cm *RedisCacheManager) SetCache(
-	ctx context.Context,
-	cacheKey string,
-	data interface{},
-	logger logger.Logger,
-) {
-	cm.Set(ctx, cacheKey, data, CachedLifetime, CachedTimeout)
-	logger.Info("Data cached successfully", zap.String("cacheKey", cacheKey))
+func (cm *RedisCacheManager) SetCache(ctx context.Context, key string, data interface{}, logger logger.Logger) {
+	cm.Set(ctx, key, data, CachedLifetime, CachedTimeout)
+	logger.Info("Data cached successfully", zap.String("cacheKey", key))
 }
 
 // InvalidateCache removes cached data for a specific key.
@@ -222,21 +226,17 @@ func (cm *RedisCacheManager) SetCache(
 //
 // Parameters:
 //   - ctx (context.Context): The context for the cache operation.
-//   - cacheKey (string): The key for which the cached data should be invalidated.
+//   - key (string): The key for which the cached data should be invalidated.
 //   - logger (logger.Logger): The logger instance for logging cache operations.
 //
 // Returns:
 //   - error: An error if the cache invalidation fails, or nil if successful.
-func (cm *RedisCacheManager) InvalidateCache(
-	ctx context.Context,
-	cacheKey string,
-	logger logger.Logger,
-) error {
-	err := cm.Delete(ctx, cacheKey, CachedTimeout)
+func (cm *RedisCacheManager) InvalidateCache(ctx context.Context, key string, logger logger.Logger) error {
+	err := cm.Delete(ctx, key, CachedTimeout)
 	if err != nil {
 		logger.Error("Failed to invalidate cache", zap.Error(err))
 		return err
 	}
-	logger.Info("Cache invalidated successfully", zap.String("cacheKey", cacheKey))
+	logger.Info("Cache invalidated successfully", zap.String("cacheKey", key))
 	return nil
 }
