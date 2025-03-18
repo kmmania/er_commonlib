@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/kmmania/er_commonlib/pkg/middleware/cancel"
-	mocks "github.com/kmmania/er_commonlib/pkg/mocks/logger"
+	"github.com/kmmania/er_commonlib/pkg/mocks/logger"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
